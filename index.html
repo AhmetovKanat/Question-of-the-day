@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вопрос дня</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+        #full-screen-image {
+            background-image: url('image.png');
+            background-size: cover;
+            background-position: center;
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 9999;
+            cursor: pointer;
+        }
+        #content {
+            display: none;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+        }
+        #question {
+            text-align: center;
+            padding-top: 50px;
+            font-size: 24px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 30px;
+        }
+        #answer-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+        }
+        #chart {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="full-screen-image"></div>
+    <div id="content">
+        <div id="question"></div>
+        <div class="options" id="options"></div>
+        <div id="answer-button" onclick="submitAnswer()">Ответить</div>
+    </div>
+    <canvas id="chart"></canvas>
+
+    <script>
+        document.getElementById('full-screen-image').addEventListener('click', function() {
+            this.style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+        });
+
+        // Функция для загрузки текста вопроса и вариантов ответов из файла
+        function loadQuestion() {
+            fetch('question.txt')
+                .then(response => response.text())
+                .then(data => {
+                    var lines = data.split('\n');
+                    document.getElementById('question').innerText = lines[0].trim(); // Вопрос
+                    var optionsDiv = document.getElementById('options');
+                    for (var i = 1; i < lines.length; i++) {
+                        var option = lines[i].trim();
+                        if (option) {
+                            var radioButton = document.createElement('input');
+                            radioButton.type = 'radio';
+                            radioButton.name = 'answer';
+                            radioButton.value = option;
+                            optionsDiv.appendChild(radioButton);
+                            optionsDiv.appendChild(document.createTextNode(option));
+                            optionsDiv.appendChild(document.createElement('br'));
+                        }
+                    }
+                });
+        }
+
+        function submitAnswer() {
+            var selectedAnswer = document.querySelector('input[name="answer"]:checked');
+            if (selectedAnswer) {
+                var answerValue = selectedAnswer.value;
+                // Здесь нужно отправить ответ на сервер для обработки и подсчета статистики
+                // После получения ответа от сервера можно показать круговую диаграмму
+                showChart();
+            } else {
+                alert('Пожалуйста, выберите ответ.');
+            }
+        }
+
+        function showChart() {
+            // В этой функции нужно отобразить круговую диаграмму с помощью какой-то библиотеки (например, Chart.js)
+            var ctx = document.getElementById('chart').getContext('2d');
+            // Ваш код для создания и отображения круговой диаграммы
+            document.getElementById('chart').style.display = 'block';
+        }
+
+        // Загрузка вопроса и вариантов ответов после полной загрузки DOM
+        window.onload = function() {
+            loadQuestion();
+        };
+    </script>
+</body>
+</html>
