@@ -106,13 +106,19 @@
                 var answerValue = selectedAnswer.value;
                 answerData[answerValue]++; // Увеличиваем счетчик ответов для выбранного варианта
                 localStorage.setItem('answerData', JSON.stringify(answerData)); // Сохраняем данные в localStorage
-                updateChart(answerData); // Передаем обновленные данные для построения диаграммы
+                updateChart(); // Обновляем диаграмму после сохранения данных
             } else {
                 alert('Пожалуйста, выберите ответ.');
             }
         }
 
-        function updateChart(answerData) {
+        function updateChart() {
+            // Получаем данные из localStorage
+            var savedData = localStorage.getItem('answerData');
+            if (savedData) {
+                answerData = JSON.parse(savedData);
+            }
+
             var labels = Object.keys(answerData);
             var data = Object.values(answerData);
 
@@ -160,4 +166,3 @@
     </script>
 </body>
 </html>
-
