@@ -106,6 +106,7 @@
                 var answerValue = selectedAnswer.value;
                 answerData[answerValue]++; // Увеличиваем счетчик ответов для выбранного варианта
                 localStorage.setItem('answerData', JSON.stringify(answerData)); // Сохраняем данные в localStorage
+                console.log("Ответ сохранен в localStorage: ", answerData); // Добавим вывод в консоль, чтобы убедиться, что данные сохранены
                 updateChart(); // Обновляем диаграмму после сохранения данных
             } else {
                 alert('Пожалуйста, выберите ответ.');
@@ -166,4 +167,3 @@
     </script>
 </body>
 </html>
-
