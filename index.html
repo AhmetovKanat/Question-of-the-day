@@ -72,6 +72,8 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <script>
+        var answerData = {}; // Объект для отслеживания количества ответов
+
         document.getElementById('full-screen-image').addEventListener('click', function() {
             this.style.display = 'none';
             document.getElementById('content').style.display = 'block';
@@ -88,6 +90,7 @@
                     for (var i = 1; i < lines.length; i++) {
                         var option = lines[i].trim();
                         if (option) {
+                            answerData[option] = 0; // Инициализация счетчиков ответов в ноль
                             var radioButton = document.createElement('input');
                             radioButton.type = 'radio';
                             radioButton.name = 'answer';
@@ -104,44 +107,46 @@
             var selectedAnswer = document.querySelector('input[name="answer"]:checked');
             if (selectedAnswer) {
                 var answerValue = selectedAnswer.value;
-                // Ваш код для отправки ответа на сервер и получения статистики
-                // Пока здесь мы просто показываем круговую диаграмму с фиктивными данными
-                showChart();
+                answerData[answerValue]++; // Увеличиваем счетчик ответов для выбранного варианта
+                updateChart();
             } else {
                 alert('Пожалуйста, выберите ответ.');
             }
         }
 
-        function showChart() {
-            // Фиктивные данные для круговой диаграммы
-            var data = {
-                labels: ['Вариант 1', 'Вариант 2', 'Вариант 3', 'Вариант 4', 'Вариант 5', 'Вариант 6'],
-                datasets: [{
-                    data: [20, 30, 10, 15, 5, 20], // Фиктивные данные
-                    backgroundColor: [
-                        'rgba(255, 99, 132, 0.5)',
-                        'rgba(54, 162, 235, 0.5)',
-                        'rgba(255, 206, 86, 0.5)',
-                        'rgba(75, 192, 192, 0.5)',
-                        'rgba(153, 102, 255, 0.5)',
-                        'rgba(255, 159, 64, 0.5)'
-                    ],
-                    borderColor: [
-                        'rgba(255, 99, 132, 1)',
-                        'rgba(54, 162, 235, 1)',
-                        'rgba(255, 206, 86, 1)',
-                        'rgba(75, 192, 192, 1)',
-                        'rgba(153, 102, 255, 1)',
-                        'rgba(255, 159, 64, 1)'
-                    ],
-                    borderWidth: 1
-                }]
-            };
+        function updateChart() {
+            var labels = Object.keys(answerData);
+            var data = Object.values(answerData);
 
             var ctx = document.getElementById('chart').getContext('2d');
-            var myChart = new Chart(ctx, {
+            if (window.myChart instanceof Chart) {
+                window.myChart.destroy(); // Уничтожаем предыдущую диаграмму, чтобы не накапливать мусор
+            }
+            window.myChart = new Chart(ctx, {
                 type: 'doughnut',
-                data: data,
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        data: data,
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.5)',
+                            'rgba(54, 162, 235, 0.5)',
+                            'rgba(255, 206, 86, 0.5)',
+                            'rgba(75, 192, 192, 0.5)',
+                            'rgba(153, 102, 255, 0.5)',
+                            'rgba(255, 159, 64, 0.5)'
+                        ],
+                        borderColor: [
+                            'rgba(255, 99, 132, 1)',
+                            'rgba(54, 162, 235, 1)',
+                            'rgba(255, 206, 86, 1)',
+                            'rgba(75, 192, 192, 1)',
+                            'rgba(153, 102, 255, 1)',
+                            'rgba(255, 159, 64, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false
@@ -157,4 +162,5 @@
     </script>
 </body>
 </html>
+
 
