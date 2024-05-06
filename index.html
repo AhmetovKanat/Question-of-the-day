@@ -108,6 +108,7 @@
             if (selectedAnswer) {
                 var answerValue = selectedAnswer.value;
                 answerData[answerValue]++; // Увеличиваем счетчик ответов для выбранного варианта
+                localStorage.setItem('answerData', JSON.stringify(answerData)); // Сохраняем данные в localStorage
                 updateChart();
             } else {
                 alert('Пожалуйста, выберите ответ.');
@@ -115,6 +116,12 @@
         }
 
         function updateChart() {
+            // Получаем данные из localStorage
+            var savedData = localStorage.getItem('answerData');
+            if (savedData) {
+                answerData = JSON.parse(savedData);
+            }
+
             var labels = Object.keys(answerData);
             var data = Object.values(answerData);
 
@@ -158,6 +165,7 @@
 
         window.onload = function() {
             loadQuestion();
+            updateChart(); // Обновляем диаграмму при загрузке страницы
         };
     </script>
 </body>
