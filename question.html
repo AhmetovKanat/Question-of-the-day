@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Вопрос</title>
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #f0f0f0;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <h2>Из какой вы страны?</h2>
+  <form id="countryForm">
+    <input type="radio" name="country" value="EU"> Евро Союз<br>
+    <input type="radio" name="country" value="RU"> Россия<br>
+    <input type="radio" name="country" value="CN"> Китай<br>
+    <input type="radio" name="country" value="IN"> Индия<br>
+    <input type="radio" name="country" value="US"> США<br>
+  </form>
+
+  <button id="answerBtn">Ответить</button>
+
+  <script>
+    document.getElementById('answerBtn').addEventListener('click', function() {
+      var selectedCountry = document.querySelector('input[name="country"]:checked');
+      if (selectedCountry) {
+        localStorage.setItem('answeredToday', 'true');
+        window.location.href = 'diagram.html?country=' + selectedCountry.value;
+      } else {
+        alert('Выберите страну!');
+      }
+    });
+  </script>
+</body>
+</html>
