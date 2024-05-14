@@ -33,6 +33,14 @@
   <button id="answerBtn">Ответить</button>
 
   <script>
+    // Проверяем, отвечал ли пользователь уже сегодня
+    var answeredToday = localStorage.getItem('answeredToday');
+    if (answeredToday) {
+      document.getElementById('answerBtn').style.display = 'none';
+    } else {
+      document.getElementById('answerBtn').style.display = 'block';
+    }
+
     document.getElementById('answerBtn').addEventListener('click', function() {
       var selectedCountry = document.querySelector('input[name="country"]:checked');
       if (selectedCountry) {
